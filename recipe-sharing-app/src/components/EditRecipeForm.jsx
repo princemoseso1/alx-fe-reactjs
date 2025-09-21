@@ -1,29 +1,45 @@
-import { useState } from 'react';
-import { useRecipeStore } from './recipeStore';
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import useRecipeStore from "./recipeStore";
 
-const EditRecipeForm = ({ recipe }) => {
-  const [title, setTitle] = useState(recipe.title);
-  const [description, setDescription] = useState(recipe.description);
+const EditRecipeForm = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const recipe = useRecipeStore((state) =>
+    state.recipes.find((r) => r.id === Number(id))
+  );
+
   const updateRecipe = useRecipeStore((state) => state.updateRecipe);
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); // ✅ checker requires this exact name
+  const [title, setTitle] = useState(recipe?.title || "");
+  const [description, setDescription] = useState(recipe?.description || "");
+
+  if (!recipe) return <p>Recipe not found.</p>;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
     updateRecipe(recipe.id, { title, description });
+    navigate(`/recipe/${recipe.id}`);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="p-4">
+      <h2 className="text-lg font-bold mb-2">Edit Recipe</h2>
       <input
+        className="border p-2 mb-2 w-full"
         value={title}
-        onChange={(event) => setTitle(event.target.value)}
-        placeholder="Recipe title"
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Title"
       />
       <textarea
+        className="border p-2 mb-2 w-full"
         value={description}
-        onChange={(event) => setDescription(event.target.value)}
-        placeholder="Recipe description"
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Description"
       />
-      <button type="submit">Update Recipe</button>
+      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        Save
+      </button>
     </form>
   );
 };
