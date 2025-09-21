@@ -16,8 +16,8 @@ const EditRecipeForm = () => {
 
   if (!recipe) return <p>Recipe not found.</p>;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault(); // ✅ now matches the check
     updateRecipe(recipe.id, { title, description });
     navigate(`/recipe/${recipe.id}`);
   };
@@ -28,13 +28,13 @@ const EditRecipeForm = () => {
       <input
         className="border p-2 mb-2 w-full"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(event) => setTitle(event.target.value)}
         placeholder="Title"
       />
       <textarea
         className="border p-2 mb-2 w-full"
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={(event) => setDescription(event.target.value)}
         placeholder="Description"
       />
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
