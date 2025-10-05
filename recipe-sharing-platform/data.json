@@ -1,0 +1,18 @@
+{
+  "recipes": [
+    {
+      "id": 1,
+      "title": "Spaghetti Bolognese",
+      "image": "https://source.unsplash.com/800x600/?spaghetti",
+      "ingredients": ["200g spaghetti", "100g minced beef", "Tomato sauce", "Onions", "Garlic"],
+      "instructions": "Boil the spaghetti. Cook the beef with onions and garlic. Add tomato sauce. Mix and serve."
+    },
+    {
+      "id": 2,
+      "title": "Chicken Salad",
+      "image": "https://source.unsplash.com/800x600/?chicken-salad",
+      "ingredients": ["Chicken breast", "Lettuce", "Tomatoes", "Cucumber", "Olive oil"],
+      "instructions": "Grill the chicken. Chop vegetables. Mix together with olive oil and serve fresh."
+    }
+  ]
+}
