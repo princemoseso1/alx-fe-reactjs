@@ -1,87 +1,46 @@
+import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
+const validationSchema = Yup.object({
+  username: Yup.string().required("Username is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+});
+
 const FormikForm = () => {
-  const initialValues = {
-    username: "",
-    email: "",
-    password: "",
-  };
-
-  const validationSchema = Yup.object({
-    username: Yup.string().required("Username is required"),
-    email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
-  });
-
-  const handleSubmit = (values, { resetForm }) => {
-    alert(`User Registered: ${values.username}`);
-    console.log("User registered successfully:", values);
-    resetForm();
-  };
-
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-md bg-white">
-      <h2 className="text-2xl font-semibold text-center mb-4">
-        User Registration (Formik)
-      </h2>
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-semibold text-center mb-4">Formik User Registration</h2>
 
       <Formik
-        initialValues={initialValues}
+        initialValues={{ username: "", email: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={(values) => {
+          console.log("Formik Form submitted:", values);
+          alert("User registered successfully!");
+        }}
       >
-        <Form>
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">Username</label>
-            <Field
-              type="text"
-              name="username"
-              className="w-full p-2 border rounded"
-            />
-            <ErrorMessage
-              name="username"
-              component="p"
-              className="text-red-500 text-sm mt-1"
-            />
+        <Form className="space-y-4">
+          <div>
+            <label className="block text-gray-700 font-medium">Username</label>
+            <Field name="username" className="w-full border rounded-lg p-2 mt-1" />
+            <ErrorMessage name="username" component="p" className="text-red-500 text-sm" />
           </div>
 
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">Email</label>
-            <Field
-              type="email"
-              name="email"
-              className="w-full p-2 border rounded"
-            />
-            <ErrorMessage
-              name="email"
-              component="p"
-              className="text-red-500 text-sm mt-1"
-            />
+          <div>
+            <label className="block text-gray-700 font-medium">Email</label>
+            <Field name="email" type="email" className="w-full border rounded-lg p-2 mt-1" />
+            <ErrorMessage name="email" component="p" className="text-red-500 text-sm" />
           </div>
 
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">Password</label>
-            <Field
-              type="password"
-              name="password"
-              className="w-full p-2 border rounded"
-            />
-            <ErrorMessage
-              name="password"
-              component="p"
-              className="text-red-500 text-sm mt-1"
-            />
+          <div>
+            <label className="block text-gray-700 font-medium">Password</label>
+            <Field name="password" type="password" className="w-full border rounded-lg p-2 mt-1" />
+            <ErrorMessage name="password" component="p" className="text-red-500 text-sm" />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
-          >
+          <button type="submit" className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
             Register
           </button>
         </Form>
