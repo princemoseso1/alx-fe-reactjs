@@ -1,52 +1,59 @@
-// src/components/PostsComponent.jsx
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 
-const PostsComponent = () => {
-  const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+const fetchPosts = async () => {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch("https://jsonplaceholder.typicode.com/posts");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setPosts(data.slice(0, 10)); // limiting to 10 for demo
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, []);
+function PostsComponent() {
+  const {
+    data: posts,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["posts"],
+    queryFn: fetchPosts,
+    staleTime: 1000 * 60 * 5, // cache for 5 minutes
+  });
 
   if (isLoading) {
-    return <div className="text-center text-gray-500">Loading posts...</div>;
+    return <p className="text-gray-600">Loading posts...</p>;
   }
 
   if (isError) {
-    return <div className="text-center text-red-500">Failed to load posts.</div>;
+    return <p className="text-red-500">Error: {error.message}</p>;
   }
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Latest Posts</h2>
-      <ul className="space-y-4">
+    <div className="w-full max-w-3xl bg-white p-4 rounded shadow">
+      <button
+        onClick={() => refetch()}
+        className="bg-blue-600 text-white px-4 py-2 rounded mb-4 hover:bg-blue-700"
+      >
+        Refresh Posts
+      </button>
+
+      <ul className="space-y-3">
         {posts.map((post) => (
-          <li key={post.id} className="p-4 bg-white shadow rounded-lg hover:shadow-md transition">
-            <h3 className="text-lg font-bold text-gray-800 mb-2">{post.title}</h3>
-            <p className="text-gray-600">{post.body}</p>
+          <li
+            key={post.id}
+            className="border border-gray-200 p-3 rounded hover:bg-gray-50"
+          >
+            <h2 className="font-semibold text-lg text-blue-700">
+              {post.title}
+            </h2>
+            <p className="text-gray-700 text-sm">{post.body}</p>
           </li>
         ))}
       </ul>
     </div>
   );
-};
+}
 
-export default PostsCompone
+export default PostsComponent;
