@@ -1,82 +1,74 @@
 import React, { useState } from "react";
 
 const RegistrationForm = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-
-  const [errors, setErrors] = useState({});
-
-  const validate = () => {
-    let newErrors = {};
-    if (!formData.username) newErrors.username = "Username is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.password) newErrors.password = "Password is required";
-    return newErrors;
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newErrors = validate();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-    } else {
-      console.log("Form submitted:", formData);
-      alert("User registered successfully!");
-      setErrors({});
+
+    if (!username || !email || !password) {
+      setError("All fields are required!");
+      return;
     }
+
+    setError("");
+    alert(`User Registered:\nUsername: ${username}\nEmail: ${email}`);
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-center mb-4">User Registration</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-gray-700 font-medium">Username</label>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
+      >
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          User Registration
+        </h2>
+
+        {error && (
+          <p className="text-red-500 text-center mb-3 font-medium">{error}</p>
+        )}
+
+        <div className="mb-4">
+          <label className="block mb-1 font-medium">Username:</label>
           <input
             type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-2 mt-1"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            placeholder="Enter username"
           />
-          {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
         </div>
 
-        <div>
-          <label className="block text-gray-700 font-medium">Email</label>
+        <div className="mb-4">
+          <label className="block mb-1 font-medium">Email:</label>
           <input
             type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-2 mt-1"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            placeholder="Enter email"
           />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
         </div>
 
-        <div>
-          <label className="block text-gray-700 font-medium">Password</label>
+        <div className="mb-4">
+          <label className="block mb-1 font-medium">Password:</label>
           <input
             type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-2 mt-1"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            placeholder="Enter password"
           />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
         </div>
 
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+        >
           Register
         </button>
       </form>
